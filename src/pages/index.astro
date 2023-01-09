@@ -11,16 +11,58 @@ const notion = new Client({
   });
 
 	const response = await notion.databases.query({
-    database_id: "1cc1dcbfc51d4989a111d49aa20c678d",
+    database_id: "be4a562f25864a6c99b89b9baab56055",
   });
 
-	console.log(response.results[0]);
+	let pageId = response.results[0].id
+
+	const testPageContents = await notion.blocks.retrieve({
+		block_id: pageId
+	});
+
+	console.log(testPageContents)
+
+	const blockChildren = await notion.blocks.children.list({
+		block_id: pageId
+	})
+
+	let image;
+
+	const blockTypes = blockChildren.results.map((block) => block.type);
+
+	console.log(blockTypes)
+	
+	let blockArray: string[] = [];
+
+
+	blockChildren.results.forEach((block) => {
+		let type = block.type;
+		console.log(type)
+		if(block.type ===  'heading_1') {
+			let title = block.heading_1.rich_text[0].plain_text;
+			blockArray.push(title);
+		}
+		if(block.type === 'paragraph') {
+			let paragraph = block.paragraph.rich_text[0].plain_text;
+			blockArray.push(paragraph);
+		}
+		if(block.type === 'bulleted_list_item') {
+			let bullet = block.bulleted_list_item.rich_text[0].plain_text;
+			blockArray.push(bullet);
+		}
+		if(block.type === "image"){
+			image = block["image"].type === "external" ? block["image"].external.url : block["image"].file.url;
+		}
+	})	
 
 ---
 
 <Layout title="Welcome to Astro.">
 	<main>
-		<h1 class="text-4xl">{response.results[0].id}</h1>
+		{blockArray.map((block) => {
+			return <p>{block}</p>
+		})}
+		<img src={image} alt={'hello'} />
 	</main>
 </Layout>
 
