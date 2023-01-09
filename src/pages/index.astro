@@ -1,0 +1,33 @@
+---
+import {Client} from '@notionhq/client';
+import dotenv from 'dotenv';
+
+import Layout from '../layouts/Layout.astro';
+
+dotenv.config();
+
+const notion = new Client({
+    auth: process.env.NOTION_TOKEN,
+  });
+
+	const response = await notion.databases.query({
+    database_id: "1cc1dcbfc51d4989a111d49aa20c678d",
+  });
+
+	console.log(response.results[0]);
+
+---
+
+<Layout title="Welcome to Astro.">
+	<main>
+		<h1 class="text-4xl">{response.results[0].id}</h1>
+	</main>
+</Layout>
+
+<style>
+	main {
+		margin: auto;
+		padding: 1.5rem;
+		max-width: 60ch;
+	}
+</style>
