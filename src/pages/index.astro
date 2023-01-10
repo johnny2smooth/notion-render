@@ -1,75 +1,117 @@
 ---
-import {Client} from '@notionhq/client';
-import dotenv from 'dotenv';
+import { Client } from "@notionhq/client";
+import dotenv from "dotenv";
 
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 
 dotenv.config();
 
 const notion = new Client({
-    auth: process.env.NOTION_TOKEN,
-  });
+  auth: process.env.NOTION_TOKEN,
+});
 
-	const response = await notion.databases.query({
-    database_id: "be4a562f25864a6c99b89b9baab56055",
-  });
+const response = await notion.databases.query({
+  database_id: "be4a562f25864a6c99b89b9baab56055",
+});
 
-	let pageId = response.results[0].id
+let pageIDs = response.results.map((result) => result.id);
 
-	const testPageContents = await notion.blocks.retrieve({
-		block_id: pageId
-	});
+const comments = await Promise.all(
+  pageIDs.map(async (result) => {
+    const response = await notion.comments.list({ block_id: result });
+    return response.results.map((comment) => comment.rich_text[0].plain_text);
+  })
+);
 
-	console.log(testPageContents)
+console.log(comments);
 
-	const blockChildren = await notion.blocks.children.list({
-		block_id: pageId
-	})
+// const comments = await notion.comments.list({
+// 		block_id: response.results.map(response => response.id),
+// 	});
 
-	let image;
+// const commentsArray = comments.results.map(comment => comment.rich_text[0].plain_text);
 
-	const blockTypes = blockChildren.results.map((block) => block.type);
+// console.log(commentsArray)
 
-	console.log(blockTypes)
-	
-	let blockArray: string[] = [];
+// 	console.log(comments)
+// const testPageContents = await notion.blocks.retrieve({
+// 	block_id: pageId
+// });
 
+// console.log(testPageContents)
 
-	blockChildren.results.forEach((block) => {
-		let type = block.type;
-		console.log(type)
-		if(block.type ===  'heading_1') {
-			let title = block.heading_1.rich_text[0].plain_text;
-			blockArray.push(title);
-		}
-		if(block.type === 'paragraph') {
-			let paragraph = block.paragraph.rich_text[0].plain_text;
-			blockArray.push(paragraph);
-		}
-		if(block.type === 'bulleted_list_item') {
-			let bullet = block.bulleted_list_item.rich_text[0].plain_text;
-			blockArray.push(bullet);
-		}
-		if(block.type === "image"){
-			image = block["image"].type === "external" ? block["image"].external.url : block["image"].file.url;
-		}
-	})	
+// const blockChildren = await notion.blocks.children.list({
+// 	block_id: pageId
+// })
 
+// let image;
+
+// const blockTypes = blockChildren.results.map((block) => block.type);
+
+// console.log(blockTypes)
+
+// let blockArray: string[] = [];
+
+// blockChildren.results.forEach((block) => {
+// 	let type = block.type;
+// 	console.log(type)
+// 	if(block.type ===  'heading_1') {
+// 		let title = block.heading_1.rich_text[0].plain_text;
+// 		blockArray.push(title);
+// 	}
+// 	if(block.type === 'paragraph') {
+// 		let paragraph = block.paragraph.rich_text[0].plain_text;
+// 		blockArray.push(paragraph);
+// 	}
+// 	if(block.type === 'bulleted_list_item') {
+// 		let bullet = block.bulleted_list_item.rich_text[0].plain_text;
+// 		blockArray.push(bullet);
+// 	}
+// 	if(block.type === "image"){
+// 		image = block["image"].type === "external" ? block["image"].external.url : block["image"].file.url;
+// 	}
+// })
 ---
 
-<Layout title="Welcome to Astro.">
-	<main>
-		{blockArray.map((block) => {
+<Layout title="Notion Dabble.">
+  <main>
+    <h1>Notion Dabble.</h1>
+    <p>Testing out the Notion API.</p>
+    <p>
+      Comments: {
+        comments.map((comment) => {
+          return comment.length > 0 ? (
+            <ul>
+              {comment.map((comment, i) => {
+                return (
+                  <li>
+                    {i + 1}. {comment}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p>nothing</p>
+          );
+        })
+      }
+    </p>
+
+    <!-- {commentsArray.map((comment) => {
+			return <p>{comment}</p>
+		})} -->
+
+    <!-- {blockArray.map((block) => {
 			return <p>{block}</p>
 		})}
-		<img src={image} alt={'hello'} />
-	</main>
+		<img src={image} alt={'hello'} /> -->
+  </main>
 </Layout>
 
 <style>
-	main {
-		margin: auto;
-		padding: 1.5rem;
-		max-width: 60ch;
-	}
+  main {
+    margin: auto;
+    padding: 1.5rem;
+    max-width: 60ch;
+  }
 </style>
