@@ -3,7 +3,7 @@ import { getDBInfo } from "../utils/asyncGetters";
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 const results = await getDBInfo("be4a562f25864a6c99b89b9baab56055");
-console.log(results[2].properties.Genre);
+console.log(results[0].properties.BookCover);
 ---
 
 <Layout title="Notion Dabble.">
@@ -22,6 +22,7 @@ console.log(results[2].properties.Genre);
             user={result.user}
             genre={result.genre}
             color={result.color}
+            cover={result.cover}
           />
         ))
       }
