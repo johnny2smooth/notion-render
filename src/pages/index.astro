@@ -1,110 +1,24 @@
 ---
-import { Client } from "@notionhq/client";
-import dotenv from "dotenv";
-
+import getDBInfo from "../utils/getAsyncDBInfo";
 import Layout from "../layouts/Layout.astro";
-
-dotenv.config();
-
-const notion = new Client({
-  auth: process.env.NOTION_TOKEN,
-});
-
-const response = await notion.databases.query({
-  database_id: "be4a562f25864a6c99b89b9baab56055",
-});
-
-let pageIDs = response.results.map((result) => result.id);
-
-const comments = await Promise.all(
-  pageIDs.map(async (result) => {
-    const response = await notion.comments.list({ block_id: result });
-    return response.results.map((comment) => comment.rich_text[0].plain_text);
-  })
-);
-
-console.log(comments);
-
-// const comments = await notion.comments.list({
-// 		block_id: response.results.map(response => response.id),
-// 	});
-
-// const commentsArray = comments.results.map(comment => comment.rich_text[0].plain_text);
-
-// console.log(commentsArray)
-
-// 	console.log(comments)
-// const testPageContents = await notion.blocks.retrieve({
-// 	block_id: pageId
-// });
-
-// console.log(testPageContents)
-
-// const blockChildren = await notion.blocks.children.list({
-// 	block_id: pageId
-// })
-
-// let image;
-
-// const blockTypes = blockChildren.results.map((block) => block.type);
-
-// console.log(blockTypes)
-
-// let blockArray: string[] = [];
-
-// blockChildren.results.forEach((block) => {
-// 	let type = block.type;
-// 	console.log(type)
-// 	if(block.type ===  'heading_1') {
-// 		let title = block.heading_1.rich_text[0].plain_text;
-// 		blockArray.push(title);
-// 	}
-// 	if(block.type === 'paragraph') {
-// 		let paragraph = block.paragraph.rich_text[0].plain_text;
-// 		blockArray.push(paragraph);
-// 	}
-// 	if(block.type === 'bulleted_list_item') {
-// 		let bullet = block.bulleted_list_item.rich_text[0].plain_text;
-// 		blockArray.push(bullet);
-// 	}
-// 	if(block.type === "image"){
-// 		image = block["image"].type === "external" ? block["image"].external.url : block["image"].file.url;
-// 	}
-// })
+const { results } = await getDBInfo("be4a562f25864a6c99b89b9baab56055");
 ---
 
 <Layout title="Notion Dabble.">
   <main>
     <h1>Notion Dabble.</h1>
     <p>Testing out the Notion API.</p>
-    <p>
-      Comments: {
-        comments.map((comment) => {
-          return comment.length > 0 ? (
-            <ul>
-              {comment.map((comment, i) => {
-                return (
-                  <li>
-                    {i + 1}. {comment}
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <p>nothing</p>
-          );
-        })
+    <ul>
+      {
+        results.map((result) => (
+          <li>
+            <button class="text-4xl">
+              <a href={result.url}>{result.title}</a>
+            </button>
+          </li>
+        ))
       }
-    </p>
-
-    <!-- {commentsArray.map((comment) => {
-			return <p>{comment}</p>
-		})} -->
-
-    <!-- {blockArray.map((block) => {
-			return <p>{block}</p>
-		})}
-		<img src={image} alt={'hello'} /> -->
+    </ul>
   </main>
 </Layout>
 

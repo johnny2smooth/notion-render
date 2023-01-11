@@ -1,0 +1,31 @@
+---
+// let pageIDs = response.results.map((result) => result.id);
+
+// const comments = await Promise.all(
+//   pageIDs.map(async (result) => {
+//     const response = await notion.comments.list({ block_id: result });
+//     return response.results.map((comment) => comment.rich_text[0].plain_text);
+//   })
+// );
+---
+
+<div>
+  Comments:
+  <!-- {
+    comments.map((comment) => {
+      return comment.length > 0 ? (
+        <ul>
+          {comment.map((comment, i) => {
+            return (
+              <li>
+                {i + 1}. {comment}
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p>nothing</p>
+      );
+    })
+  } -->
+</div>
