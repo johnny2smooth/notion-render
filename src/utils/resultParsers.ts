@@ -1,16 +1,6 @@
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
-import initNotion from "./initNotion";
 
-let notion = initNotion();
-
-export default async function getAsyncDBInfo(database_id: string) {
-  const result = await notion.databases.query({
-    database_id: database_id,
-  });
-  return { notion, results: parseDBInfo(result.results) };
-}
-
-function parseDBInfo(result: PageObjectResponse[]) {
+export function parseDBInfo(result: PageObjectResponse[]) {
   return result.map(
     ({ properties, id, icon, created_time, created_by, archived, url }) => {
       let title, emoji, user;

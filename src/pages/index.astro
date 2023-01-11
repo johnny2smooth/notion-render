@@ -1,7 +1,7 @@
 ---
-import getDBInfo from "../utils/getAsyncDBInfo";
+import { getDBInfo } from "../utils/asyncGetters";
 import Layout from "../layouts/Layout.astro";
-const { results } = await getDBInfo("be4a562f25864a6c99b89b9baab56055");
+const results = await getDBInfo("be4a562f25864a6c99b89b9baab56055");
 ---
 
 <Layout title="Notion Dabble.">
