@@ -3,13 +3,14 @@ import { getDBInfo } from "../utils/asyncGetters";
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 const results = await getDBInfo("be4a562f25864a6c99b89b9baab56055");
-console.log(results[0].properties.BookCover);
 ---
 
-<Layout title="Notion Dabble.">
+<Layout title="Books">
   <main>
-    <h1>Notion Dabble.</h1>
-    <p>Testing out the Notion API.</p>
+    <h1 class="text-xl text-blue-500 text-center mb-6">
+      A list of books we have uncovered
+    </h1>
+
     <ul>
       {
         results.map((result) => (
@@ -23,6 +24,7 @@ console.log(results[0].properties.BookCover);
             genre={result.genre}
             color={result.color}
             cover={result.cover}
+            author={result.author}
           />
         ))
       }

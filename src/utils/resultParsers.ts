@@ -2,7 +2,7 @@ import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoint
 
 export function parseDBInfo(result: PageObjectResponse[]) {
   return result.map(({ properties, id, icon, created_time, archived, url }) => {
-    let title, emoji, user, rating, image, genre, color, cover;
+    let title, emoji, user, rating, image, genre, color, cover, author;
     if (properties.Name.type === "title") {
       title = properties.Name.title[0].plain_text;
     }
@@ -38,6 +38,10 @@ export function parseDBInfo(result: PageObjectResponse[]) {
       color = properties.Genre.multi_select[0].color;
     }
 
+    if (properties.Author.type === "rich_text") {
+      author = properties.Author.rich_text[0].plain_text;
+    }
+
     return {
       properties,
       title,
@@ -52,6 +56,7 @@ export function parseDBInfo(result: PageObjectResponse[]) {
       genre,
       color,
       cover,
+      author,
     };
   });
 }

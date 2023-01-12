@@ -1,5 +1,4 @@
 ---
-import { Image, Picture } from "@astrojs/image/components";
 export interface Props {
   url: string;
   emoji: string | undefined;
@@ -10,9 +9,10 @@ export interface Props {
   genre: string | null | undefined;
   color: string | null | undefined;
   cover: string | null | undefined;
+  author: string | null | undefined;
 }
 
-let { url, emoji, title, rating, user, image, genre, color, cover } =
+let { url, emoji, title, rating, user, image, genre, color, cover, author } =
   Astro.props;
 
 if (color === "yellow") {
@@ -20,31 +20,31 @@ if (color === "yellow") {
 }
 ---
 
-<div
-  class="mb-6 bg-state-100 hover:bg-slate-200 text-slate-900 rounded-md shadow-md border-black border-2 transition-all duration-200 ease-in-out hover:translate-x-0.5 hover:-translate-y-0.5"
->
-  <li class="py-4 px-4">
-    <button class="text-2xl">
-      <a href={url}>
-        {emoji}
-        {title}
-      </a>
-    </button>
-    <!-- <img class="w-[10%] mx-auto" src={cover} alt={user} /> -->
-    <div class="flex justify-end items-end">
-      <p class="colorful text-xs text-slate-500">
-        {genre}
-      </p>
-      <span class="grow"></span>
-      <div>
-        <p class="text-right text-xs text-slate-300">
-          {rating}
-        </p>
-        <p class="text-right text-xs text-slate-500">{user}</p>
-      </div>
-      <img class="w-10 rounded-full" src={image} alt={user} />
-    </div>
-  </li>
+<div class="flex">
+  <button
+    class={`text-md text-left w-full mb-6 bg-state-100 hover:bg-blue-100 text-slate-900 rounded-md shadow-md border-black border-2 transition-all duration-200 ease-in-out hover:translate-x-0.5 hover:-translate-y-0.5`}
+  >
+    <a href={url}>
+      <li class="py-4 px-4">
+        <p>{title}</p>
+        <p class="text-xs text-slate-700">{author}</p>
+        <div class="flex justify-end items-end">
+          <p class="text-sm mr-2">{emoji}</p>
+          <p class="colorful text-xs text-slate-500">
+            {genre}
+          </p>
+          <span class="grow"></span>
+          <div>
+            <p class="text-right text-xs text-slate-300">
+              {rating}
+            </p>
+            <p class="text-right text-xs text-slate-500">{user}</p>
+          </div>
+          <img class="w-10 rounded-full" src={image} alt={user} />
+        </div>
+      </li>
+    </a>
+  </button>
 </div>
 <style define:vars={{ color }}>
   .colorful {
