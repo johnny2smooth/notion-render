@@ -1,26 +1,11 @@
 ---
 import { getDBInfo } from "../utils/asyncGetters";
 const results = await getDBInfo("be4a562f25864a6c99b89b9baab56055");
-// export interface Props {
-//   url: string;
-//   emoji: string | undefined;
-//   title: string | undefined;
-//   rating: string | undefined;
-//   user: string | undefined | null;
-//   image: string | null | undefined;
-//   genre: string | null | undefined;
-//   color: string | null | undefined;
-//   cover: string | null | undefined;
-//   author: string | null | undefined;
-// }
-
-// let { url, emoji, title, rating, user, image, genre, color, cover, author } =
-//   Astro.props;
 ---
 
-<h1 class="text-xl text-blue-500 text-center mb-6">
+<h2 class="text-xl text-blue-500 text-center mb-6">
   A list of books we have uncovered
-</h1>
+</h2>
 <ul>
   {
     results.map((result) => (
@@ -42,11 +27,6 @@ const results = await getDBInfo("be4a562f25864a6c99b89b9baab56055");
                   </p>
                   <p class="text-right text-xs text-slate-500">{result.user}</p>
                 </div>
-                <img
-                  class="w-10 rounded-full"
-                  src={result.image}
-                  alt={result.user}
-                />
               </div>
             </li>
           </a>
@@ -55,3 +35,9 @@ const results = await getDBInfo("be4a562f25864a6c99b89b9baab56055");
     ))
   }
 </ul>
+
+<!-- <img
+                  class="w-10 rounded-full text-xs pl-2"
+                  src={result.image}
+                  alt={result.user}
+                /> -->
