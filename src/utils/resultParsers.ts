@@ -1,8 +1,10 @@
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 export function parseDBInfo(result: PageObjectResponse[]) {
+  console.log(result[0].properties.Genre);
   return result.map(({ properties, id, icon, created_time, archived, url }) => {
-    let title, emoji, user, rating, image, genre, color, cover, author;
+    let title, emoji, user, rating, image, genre, color, author;
+
     if (properties.Name.type === "title") {
       title = properties.Name.title[0].plain_text;
     }
@@ -25,17 +27,9 @@ export function parseDBInfo(result: PageObjectResponse[]) {
       }
     }
 
-    if (properties.BookCover.type === "files") {
-      if (properties.BookCover.files[0].type === "file") {
-        cover = properties.BookCover.files[0].file.url;
-      } else if (properties.BookCover.files[0].type === "external") {
-        cover = properties.BookCover.files[0].name;
-      }
-    }
-
-    if (properties.Genre.type === "multi_select") {
-      genre = properties.Genre.multi_select[0].name;
-      color = properties.Genre.multi_select[0].color;
+    if (properties.Genre.type === "select") {
+      genre = properties.Genre.select.name;
+      color = properties.Genre.select.color;
     }
 
     if (properties.Author.type === "rich_text") {
@@ -55,7 +49,6 @@ export function parseDBInfo(result: PageObjectResponse[]) {
       image,
       genre,
       color,
-      cover,
       author,
     };
   });
