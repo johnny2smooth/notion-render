@@ -3,18 +3,44 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Add Review">
-  <main>
+  <main class="stack">
     <h1 class="text-2xl">Add Review</h1>
     <form action="/api/review" method="POST" class="stack">
-      <label class="w-24">
-        <span>Rating</span>
-        <input type="number" name="rating" min="1" max="5" />
-      </label>
       <label>
-        <span>Review</span>
-        <textarea name="review"></textarea>
+        <p>Book Name</p>
+        <input type="text" class="w-72 form-input px-4 py-3 rounded-full" />
       </label>
-      <button type="submit">Submit</button>
+
+      <label>
+        <p>Author</p>
+        <input type="text" class="w-72 form-input px-4 py-3 rounded-full" />
+      </label>
+
+      <label>
+        <p>Review</p>
+        <input type="text" class="w-72 form-input px-4 py-3 rounded-full" />
+      </label>
+
+      <label>
+        <p>Rating</p>
+        <input type="text" class="w-72 form-input px-4 py-3 rounded-full" />
+      </label>
+
+      <label>
+        <p>Genre</p>
+        <input type="text" class="w-72 form-input px-4 py-3 rounded-full" />
+      </label>
+
+      <select class="form-select px-4 py-3 rounded-full">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <input type="checkbox" class="form-checkbox rounded text-pink-500" />
+      <!-- submit -->
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </main>
 </Layout>
