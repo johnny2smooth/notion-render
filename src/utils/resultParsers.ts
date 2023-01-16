@@ -1,9 +1,8 @@
 import type { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 
 export function parseDBInfo(result: PageObjectResponse[]) {
-  console.log(result[0].properties.Genre);
   return result.map(({ properties, id, icon, created_time, archived, url }) => {
-    let title, emoji, user, rating, image, genre, color, author;
+    let title, emoji, user, rating, image, genre, color, author, review;
 
     if (properties.Name.type === "title") {
       title = properties.Name.title[0].plain_text;
@@ -36,6 +35,10 @@ export function parseDBInfo(result: PageObjectResponse[]) {
       author = properties.Author.rich_text[0].plain_text;
     }
 
+    if (properties.Review.type === "rich_text") {
+      review = properties.Review.rich_text[0].plain_text;
+    }
+
     return {
       properties,
       title,
@@ -50,6 +53,7 @@ export function parseDBInfo(result: PageObjectResponse[]) {
       genre,
       color,
       author,
+      review,
     };
   });
 }
